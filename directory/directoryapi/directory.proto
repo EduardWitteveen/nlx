@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+// Package directoryapi defines the directory api.
+package directoryapi;
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+
+option (gogoproto.marshaler_all) = true;
+option (gogoproto.sizer_all) = true;
+option (gogoproto.unmarshaler_all) = true;
+option (gogoproto.goproto_getters_all) = false;
+
+// The Directory service definition.
+service Directory {
+	// RegisterGateway registers a new gateway
+	rpc RegisterGateway (RegisterGatewayRequest) returns (RegisterGatewayResponse) {}
+	// RegisterService registers a new service to the gateway
+	rpc RegisterService (RegisterServiceRequest) returns (RegisterServiceResponse) {}
+	// GetServices lists all services and their gateways.
+	rpc GetServices (GetServicesRequest) returns (GetServicesResponse) {}
+}
+
+message RegisterGatewayRequest {
+	string name = 1;
+	string address = 2;
+}
+
+message RegisterGatewayResponse {
+	string error = 1;
+}
+
+message RegisterServiceRequest {
+	string name = 1;
+	string gateway_name = 2;
+}
+
+message RegisterServiceResponse {
+	string error = 1;
+}
+
+message GetServicesRequest {}
+
+message GetServicesResponse {
+	string error = 1;
+	repeated Service services = 2;
+}
+
+message Service {
+	string name = 1;
+	string organization_name = 2;
+	repeated Gateway gateways = 3;
+}
+
+message Gateway {
+	string name = 1;
+	string address = 2;
+}
